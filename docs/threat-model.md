@@ -16,6 +16,8 @@ Status: **starter**. This is a research contribution target. Extend it.
 | **Manuscript tampering** | Changing a file after registration | Content hash anchored on-chain, CID verification |
 | **Key compromise** | Examiner or author key stolen | Standard wallet hygiene, recovery out of scope for v0 |
 | **Censorship at the gateway** | IPFS gateway hides a manuscript | Multiple gateways, pinning guidance |
+| **Settlement authority compromise** | A compromised authority releases escrow or changes settlement outcomes | Immutable authority set during deployment, governance multisig, no real funds before audit |
+| **Group vote concentration** | One voter group dominates quality tallies | Allowlisted roles, per-voter reputation cap, bounded per-group aggregate weight |
 
 ## Assumptions
 

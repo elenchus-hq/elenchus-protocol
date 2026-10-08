@@ -7,3 +7,4 @@ Short documents that record a decision and why it was made. Copy `0001-monorepo.
 | 0001 | Use a monorepo | Accepted |
 | 0002 | Design tokens as a first-class package | Accepted |
 | 0003 | Manuscripts live off-chain, anchored by hash | Accepted |
+| 0004 | Contract authority and settlement parameters | Accepted |

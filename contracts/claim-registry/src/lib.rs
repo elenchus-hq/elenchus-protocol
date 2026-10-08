@@ -4,7 +4,13 @@
 //! The manuscript lives off-chain (IPFS). Only its SHA-256 hash (the claim id),
 //! its CID, the author, and a timestamp are stored here.
 
-use soroban_sdk::{contract, contracterror, contractimpl, contracttype, Address, BytesN, Env, String};
+use soroban_sdk::{
+    contract, contracterror, contractevent, contractimpl, contracttype, Address, BytesN, Env,
+    String,
+};
+
+const TTL_THRESHOLD: u32 = 518_400;
+const TTL_BUMP: u32 = 518_400;
 
 #[contracterror]
 #[derive(Copy, Clone, Debug, Eq, PartialEq, PartialOrd, Ord)]
@@ -26,6 +32,14 @@ pub struct Claim {
 #[contracttype]
 enum DataKey {
     Claim(BytesN<32>),
+}
+
+#[contractevent]
+pub struct ClaimRegistered {
+    #[topic]
+    content_hash: BytesN<32>,
+    #[topic]
+    author: Address,
 }
 
 #[contract]
@@ -55,7 +69,14 @@ impl ClaimRegistry {
             registered_at: env.ledger().timestamp(),
         };
         env.storage().persistent().set(&key, &claim);
-        // TODO(good-first-issue): emit a `claim_registered` event and extend the entry TTL.
+        env.storage()
+            .persistent()
+            .extend_ttl(&key, TTL_THRESHOLD, TTL_BUMP);
+        ClaimRegistered {
+            content_hash: claim.content_hash.clone(),
+            author: claim.author.clone(),
+        }
+        .publish(&env);
         Ok(())
     }
 
@@ -70,19 +91,19 @@ impl ClaimRegistry {
 #[cfg(test)]
 mod test {
     use super::*;
-    use soroban_sdk::testutils::Address as _;
+    use soroban_sdk::testutils::{storage::Persistent as _, Address as _, Ledger as _};
 
-    fn setup() -> (Env, ClaimRegistryClient<'static>) {
+    fn setup() -> (Env, ClaimRegistryClient<'static>, Address) {
         let env = Env::default();
         env.mock_all_auths();
         let id = env.register(ClaimRegistry, ());
         let client = ClaimRegistryClient::new(&env, &id);
-        (env, client)
+        (env, client, id)
     }
 
     #[test]
     fn register_then_fetch() {
-        let (env, client) = setup();
+        let (env, client, _) = setup();
         let author = Address::generate(&env);
         let hash = BytesN::from_array(&env, &[1u8; 32]);
         let cid = String::from_str(&env, "bafybeigdyrzt5example");
@@ -95,8 +116,28 @@ mod test {
     }
 
     #[test]
+    fn registration_extends_persistent_entry_ttl() {
+        let (env, client, contract_id) = setup();
+        let author = Address::generate(&env);
+        let hash = BytesN::from_array(&env, &[3u8; 32]);
+        let cid = String::from_str(&env, "bafybeigdyrzt5example");
+        client.register_claim(&author, &hash, &cid);
+
+        let ttl = env.as_contract(&contract_id, || {
+            env.storage()
+                .persistent()
+                .get_ttl(&DataKey::Claim(hash.clone()))
+        });
+        assert!(ttl >= env.ledger().sequence() + TTL_BUMP);
+
+        env.ledger().set_sequence_number(TTL_BUMP / 2);
+        let claim = client.get_claim(&hash);
+        assert_eq!(claim.content_hash, hash);
+    }
+
+    #[test]
     fn duplicate_hash_is_rejected() {
-        let (env, client) = setup();
+        let (env, client, _) = setup();
         let author = Address::generate(&env);
         let hash = BytesN::from_array(&env, &[2u8; 32]);
         let cid = String::from_str(&env, "bafybeigdyrzt5example");
@@ -108,7 +149,7 @@ mod test {
 
     #[test]
     fn unknown_claim_is_not_found() {
-        let (env, client) = setup();
+        let (env, client, _) = setup();
         let hash = BytesN::from_array(&env, &[9u8; 32]);
         assert_eq!(client.try_get_claim(&hash), Err(Ok(Error::NotFound)));
     }
