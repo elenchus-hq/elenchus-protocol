@@ -4,7 +4,7 @@
 
 In Greek philosophy, the **elenchus** is the method of testing a claim through rigorous questioning. Elenchus Protocol brings that idea to scientific peer review: an open, community-governed protocol on the [Stellar](https://stellar.org) network where reviewers are paid for rigor, held accountable for quality, and credited for their work.
 
-> **Status: early scaffold.** `claim-registry` works and is tested. Other contracts are stubs. Nothing here is audited, and nothing should hold real funds yet.
+> **Status: early scaffold.** `claim-registry` and the first testnet slices of escrow, staking, reputation, and cross-examination are implemented. Nothing here is audited, and nothing should hold real funds yet.
 
 ## Why
 

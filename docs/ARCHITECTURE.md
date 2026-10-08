@@ -28,12 +28,12 @@ flowchart LR
 | Contract | Holds | Calls |
 |---|---|---|
 | `claim-registry` | claim hash, CID, author, timestamp | none |
-| `inquiry-escrow` | bounty funds per claim | `staking`, `reputation` |
-| `staking` | examiner stake and locks | `reputation` |
+| `inquiry-escrow` | bounty funds per claim | Stellar Asset Contract |
+| `staking` | examiner stake and locks | Stellar Asset Contract |
 | `reputation` | field-scoped non-transferable score | none |
-| `cross-exam` | review quality votes | `reputation`, `inquiry-escrow` |
+| `cross-exam` | review quality votes | `reputation` |
 
-Cross-contract wiring is a design question. See `docs/protocol-spec.md`.
+The settlement authority is configured independently in each contract; testnet authority choices and remaining wiring decisions are recorded in `docs/adr/0004-contract-authority-and-settlement.md`.
 
 ## Data flow: registering a claim
 
