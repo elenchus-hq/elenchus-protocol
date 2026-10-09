@@ -11,7 +11,7 @@ Status: **starter**. This is a research contribution target. Extend it.
 | **Plagiarized reviews** | Copy of another review | Content-hash comparison, similarity checks off-chain, slashing |
 | **Vote manipulation** | Buying or coercing quality votes | Reputation weighting, vote caps per group, commit-reveal voting |
 | **Griefing authors** | Rejecting valid claims to harm an author | Multiple examiners, appeal path, reputation cost for overturned reviews |
-| **Escrow drain** | Contract bug releases funds incorrectly | Small separate contracts, audits, caps on bounty size during early phases |
+| **Escrow drain** | Contract bug releases funds incorrectly | Small separate contracts, audits, caps on bounty size during early phases (governance-settable maximum bounty enforced on deposit) |
 | **Front-running** | Seeing a review before it is final | Commit-reveal for review hashes |
 | **Manuscript tampering** | Changing a file after registration | Content hash anchored on-chain, CID verification |
 | **Key compromise** | Examiner or author key stolen | Standard wallet hygiene, recovery out of scope for v0 |
