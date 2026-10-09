@@ -224,13 +224,13 @@ mod test {
 
         let record = client.get_stake(&examiner, &claim_id);
         assert_eq!(record.amount, amount);
-        assert_eq!(record.locked, true);
+        assert!(record.locked);
 
         // Mark as unlockable (would be done by authority after review accepted)
         client.mark_unlockable(&examiner, &claim_id);
 
         let record = client.get_stake(&examiner, &claim_id);
-        assert_eq!(record.locked, false);
+        assert!(!record.locked);
 
         // Now can unlock
         client.unlock(&examiner, &claim_id);
