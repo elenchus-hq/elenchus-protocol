@@ -7,7 +7,7 @@ Soroban smart contracts, one crate per responsibility.
 | `common` | Shared types (`ClaimStatus`) | skeleton |
 | `claim-registry` | Anchor a manuscript by content hash | **working + tests** |
 | `inquiry-escrow` | Hold and release review bounties | stub |
-| `staking` | Examiner stake, lock, slash | stub |
+| `staking` | Examiner stake, lock, slash | **working + tests** |
 | `reputation` | Non-transferable Elenchus score | stub |
 | `cross-exam` | Weighted voting on review quality | stub |
 

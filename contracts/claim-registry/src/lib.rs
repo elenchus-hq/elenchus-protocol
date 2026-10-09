@@ -4,7 +4,9 @@
 //! The manuscript lives off-chain (IPFS). Only its SHA-256 hash (the claim id),
 //! its CID, the author, and a timestamp are stored here.
 
-use soroban_sdk::{contract, contracterror, contractimpl, contracttype, Address, BytesN, Env, String};
+use soroban_sdk::{
+    contract, contracterror, contractimpl, contracttype, Address, BytesN, Env, String,
+};
 
 #[contracterror]
 #[derive(Copy, Clone, Debug, Eq, PartialEq, PartialOrd, Ord)]
