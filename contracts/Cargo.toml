@@ -17,7 +17,7 @@ repository = "https://github.com/elenchus-hq/elenchus-protocol"
 
 [workspace.dependencies]
 # Verify the current release with `stellar contract init` before first build.
-soroban-sdk = "28"
+soroban-sdk = "29"
 
 [profile.release]
 opt-level = "z"
